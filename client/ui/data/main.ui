@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>864</width>
-    <height>677</height>
+    <width>1009</width>
+    <height>697</height>
    </rect>
   </property>
   <property name="font">
@@ -16,7 +16,11 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>SpaceX</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../img/app-icon.png</normaloff>../img/app-icon.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">#ButtonClose {
@@ -59,7 +63,7 @@ QTabBar::tab:selected {
     background: #1f1f23;
 }
 
-#StartPage {
+#StartPage, #RequestsPage, #FlightsPage {
 	background: #1f1f23;
 }
 
@@ -72,11 +76,11 @@ QGroupBox {
 	border: 0px;
 }
 
-#StartPage_Top_Title {
+#StartPage_Top_Title, #RequestsPage_Top_Title, #FlightsPage_Top_Title {
 	color: #fff;
 }
 
-#StartPage_Top_Refresh {
+#StartPage_Top_Refresh, #RequestsPage_Top_Refresh, #FlightsPage_Top_Refresh, #FlightsPage_Top_Create {
 	background: #18181c;
 	border: 0px;
 	padding: 5px;
@@ -85,9 +89,30 @@ QGroupBox {
 	height: 45px;
 }
 
-#StartPage_List_Content {
+#StartPage_List_Content, #RequestsPage_List_Content, #FlightsPage_List_Content {
 	background: #1f1f23;
 	border: 0px;
+}
+
+QScrollBar:vertical {
+    background: #1f1f23;
+	margin: 7px 7px 5px 0px;
+}
+
+QScrollBar::handle:vertical {
+	border-radius: 6px;
+    background: #18181c;
+    min-width: 20px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: 0px;
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+	border: 0px;
+    background: none;
 }
 
 QScrollBar:horizontal {
@@ -289,7 +314,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <enum>QTabWidget::West</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <property name="iconSize">
          <size>
@@ -448,13 +473,169 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>802</width>
-               <height>581</height>
+               <width>947</width>
+               <height>601</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <property name="spacing">
                <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="FlightsPage">
+         <attribute name="icon">
+          <iconset>
+           <normaloff>../img/flights-icon.png</normaloff>../img/flights-icon.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string/>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWidget" name="FlightsPage_Top" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="FlightsPage_Top_Title">
+               <property name="font">
+                <font>
+                 <family>Montserrat Light</family>
+                 <pointsize>18</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Список рейсов:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="FlightsPage_Top_Create">
+               <property name="styleSheet">
+                <string notr="true">margin-right: 10px;</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../img/create-icon.png</normaloff>../img/create-icon.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="FlightsPage_Top_Refresh">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../img/refresh-icon.png</normaloff>../img/refresh-icon.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QScrollArea" name="FlightsPage_List">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="FlightsPage_List_Content">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>947</width>
+               <height>601</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="spacing">
+               <number>5</number>
               </property>
               <property name="leftMargin">
                <number>5</number>
@@ -482,7 +663,10 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <attribute name="title">
           <string/>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -495,9 +679,107 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <property name="spacing">
-           <number>0</number>
-          </property>
+          <item>
+           <widget class="QWidget" name="RequestsPage_Top" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="RequestsPage_Top_Title">
+               <property name="font">
+                <font>
+                 <family>Montserrat Light</family>
+                 <pointsize>18</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Список заявок:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="RequestsPage_Top_Spacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="RequestsPage_Top_Refresh">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <disabledoff>../img/refresh-icon.png</disabledoff>
+                 <disabledon>../img/refresh-in-progress-icon.png</disabledon>
+                </iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QScrollArea" name="RequestsPage_List">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="RequestsPage_List_Content">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>930</width>
+               <height>607</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+          </item>
          </layout>
         </widget>
        </widget>

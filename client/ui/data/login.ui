@@ -35,7 +35,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../img/site-icon.png</normaloff>../img/site-icon.png</iconset>
+    <normaloff>../img/app-icon.png</normaloff>../img/app-icon.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">#LoginDiv {
