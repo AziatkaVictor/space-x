@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap, QImage, QFont, QIcon
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextBrowser, QSpacerItem, QSizePolicy, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextBrowser, QSpacerItem, QSizePolicy, QPushButton, QSizeGrip
 from PyQt5.QtCore import QSize
 from . import server_request
 from . import dialogs
@@ -21,6 +21,9 @@ class MainApplicationGUI(QWidget):
 
         self.NavBar.mouseMoveEvent = self.MoveWindow
         self.NavBar_Title.mouseMoveEvent = self.MoveWindow
+
+        self.sizegrip = QSizeGrip(self)
+        self.verticalLayout.addWidget(self.sizegrip, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
 
         self.tabWidget.blockSignals(True)
         self.tabWidget.currentChanged.connect(self.UpdateTabInfo)
