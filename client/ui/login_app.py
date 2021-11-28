@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtGui import QPixmap, QIcon
+# from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5 import QtCore
 from . import server_request
 import ui.main_app as main_ui
@@ -10,15 +10,17 @@ class LoginApplicationGUI(QMainWindow):
         super().__init__()
         uic.loadUi('ui/data/login.ui', self)
 
-        self.Background.setPixmap(QPixmap("ui/img/login-background.png"))
-        self.Logo.setPixmap(QPixmap("ui/img/Logo.png"))
-        self.ButtonClose.setIcon(QIcon("ui/img/close-icon.png"))
+        # self.Background.setPixmap(QPixmap("ui/img/login-background.png"))
+        # self.Logo.setPixmap(QPixmap("ui/img/Logo.png"))
+        # self.ButtonClose.setIcon(QIcon("ui/img/close-icon.png"))
 
         self.ButtonClose.clicked.connect(self.CloseWindow)
         self.ButtonLogin.clicked.connect(self.Login)
 
         self.NavBar.mouseMoveEvent = self.MoveWindow
         self.NavBar_Title.mouseMoveEvent = self.MoveWindow
+
+        # TODO Убрать, когда закончу.
 
         self.Username.setText('Admin')
         self.Password.setText('Admin')
@@ -29,7 +31,7 @@ class LoginApplicationGUI(QMainWindow):
     def CloseWindow(self):
         self.close()
 
-    def closeMyApp_OpenNewApp(self, login):
+    def AuthClient(self, login):
         self.SecondWindow = main_ui.MainApplicationGUI()
         self.hide()
         self.SecondWindow.show()
@@ -38,10 +40,13 @@ class LoginApplicationGUI(QMainWindow):
     def Login(self):
         login = self.Username.text()
         password = self.Password.text()
+
+        # FIXME Пофиксить на тип bool
+
         result = server_request.user_auth(login, password).lower() in ['true', '1']
 
         if result is True:
-            self.closeMyApp_OpenNewApp(login)
+            self.AuthClient(login)
         else:
             self.ErrorLabel.setText('Username or Password is incorrect!')
 

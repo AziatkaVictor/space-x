@@ -93,6 +93,21 @@ def return_rockets():
         print("Ошибка при подключении к sqlite", error)
         return False
 
+@app.get("/cities/")
+def return_cities():
+    try:
+        sqlite_connection = sqlite3.connect('spacex_database.db')
+        cursor = sqlite_connection.cursor()
+
+        sqlite_select_query = "SELECT * FROM Citys;"
+        cursor.execute(sqlite_select_query)
+
+        return cursor.fetchall()
+
+    except sqlite3.Error as error:
+        print("Ошибка при подключении к sqlite", error)
+        return False
+
 @app.get("/flights/")
 def return_flights():
     try:

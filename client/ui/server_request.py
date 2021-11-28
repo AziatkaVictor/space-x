@@ -32,6 +32,10 @@ def flights():
     r = requests.get(API + '/flights/')
     return (r.json())
 
+def citys():
+    r = requests.get(API + '/cities/')
+    return (r.json())
+
 def rocket_by_id(id):
     data = {
         "id": id

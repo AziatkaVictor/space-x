@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5 import QtCore
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLineEdit, QComboBox, QCheckBox, QSpinBox, QDateTimeEdit, QHBoxLayout, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, QAbstractSpinBox
+from ui.server_request import rockets, citys
 
 class CreationDialogGUI(QWidget):
     def __init__(self):
@@ -29,6 +30,11 @@ class CreationDialogGUI(QWidget):
         # Выбор ракеты
 
         self.EditRocket = QComboBox()
+
+        for i in rockets():
+            self.EditRocket.addItem(i[1])
+
+        self.EditRocket.addItem
         self.EditRocketLabel = QLabel('Тип ракеты:')
         self.EditRocketLabel.setFont(font)
         self.Rocket = QVBoxLayout()
@@ -46,6 +52,8 @@ class CreationDialogGUI(QWidget):
         self.Cost.addWidget(self.EditCostLabel)
         self.Cost.addWidget(self.EditCost)
 
+        # Выбор даты
+
         self.EditDate = QDateTimeEdit()
         self.EditDateLabel = QLabel('Дата и время рейса:')
         self.EditDateLabel.setFont(font)
@@ -54,9 +62,17 @@ class CreationDialogGUI(QWidget):
         self.Date.addWidget(self.EditDateLabel)
         self.Date.addWidget(self.EditDate)
 
+        # Выбор рейса
+
         self.FirstCity = QComboBox()
         self.FirstCityLabel = QLabel('Откуда:')
         self.FirstCityLabel.setFont(font)
+
+        for i in citys():
+            self.FirstCity.addItem(i[1])
+
+        self.FirstCity.currentIndexChanged.connect(self.FillSecondCity)
+
         self.City1 = QVBoxLayout()
         self.City1.addWidget(self.FirstCityLabel)
         self.City1.addWidget(self.FirstCity)
@@ -107,5 +123,18 @@ class CreationDialogGUI(QWidget):
         if event.button() == QtCore.Qt.LeftButton:
             self.clickPosition = event.globalPos()
         super(CreationDialogGUI, self).mousePressEvent(event)
+
+    def FillSecondCity(self):
+        first_city = self.FirstCity.currentText()
+
+        if self.SecondCity.count() is not 0:
+            self.SecondCity.clear()
+
+        # TODO Заменить индекс у массива на название поля
+
+        for i in citys():
+            if i[1].lower() != first_city.lower():
+                self.SecondCity.addItem(i[1])
+
 
 
