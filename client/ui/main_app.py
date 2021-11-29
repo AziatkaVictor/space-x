@@ -132,10 +132,13 @@ class MainApplicationGUI(QWidget):
                 for i in reversed(range(self.verticalLayout_5.count())):
                     self.verticalLayout_5.itemAt(i).widget().deleteLater()
 
+        # TODO Заменить индексы на имена поля
+
         if len(data) != 0:
             for item in data:
                 rocket = server_request.rocket_by_id(item[2])
-                citys = server_request.citys_by_id(item[7], item[8])
+                start_city = server_request.citys_by_id(item[7])
+                end_city = server_request.citys_by_id(item[8])
                 check = server_request.is_admin(self.User)
                 widget = QWidget()
                 card = QHBoxLayout()
@@ -144,7 +147,7 @@ class MainApplicationGUI(QWidget):
                 img = QLabel()
                 text = QTextBrowser()
 
-                data_text = 'Название: ' + str(item[1]) + '\nРакета: ' + str(rocket[0][1]) + '\nРейс: ' + str(citys[0][1]) + ' - ' + str(citys[1][1]) + '\nЦена билета: ' + str(item[5])
+                data_text = 'Название: ' + str(item[1]) + '\nРакета: ' + str(rocket[0][1]) + '\nРейс: ' + str(start_city[0]) + ' - ' + str(end_city[0]) + '\nЦена билета: ' + str(item[5])
 
                 text.setText(data_text)
 
