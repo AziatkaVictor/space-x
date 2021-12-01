@@ -15,9 +15,7 @@ class CreationDialogGUI(QWidget):
         self.NavBar.mouseMoveEvent = self.MoveWindow
         self.NavBar_Title.mouseMoveEvent = self.MoveWindow
 
-        font = QFont()
-        font.setFamily(u'Montserrat Light')
-        font.setPointSize(12)
+        font = QFont(u'Montserrat Light', 12)
 
         # Название
 
@@ -116,12 +114,14 @@ class CreationDialogGUI(QWidget):
         self.SecondCity.currentTextChanged.connect(self.UpdateButton)
 
         self.UpdateButton()
+        self.FillSecondCity()
 
     def CloseWindow(self):
         self.close()
 
     def CreateNew(self):
-        print('lol')
+        date_time = self.EditDate.dateTime().toPyDateTime().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        server_request.add_flight(self.EditTitle.text(), server_request.get_id_by_name('Rockets', self.EditRocket.currentText()), self.EditCost.value(), date_time, server_request.get_id_by_name('Citys', self.FirstCity.currentText()), server_request.get_id_by_name('Citys', self.SecondCity.currentText()))
 
     def UpdateButton(self):
         if self.EditTitle.text().replace(' ', ''):
@@ -177,6 +177,3 @@ class CreationDialogGUI(QWidget):
 
         for i in all_cities:
             self.SecondCity.addItem(i['name'])
-
-
-

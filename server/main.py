@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from models import *
 import database
+import uvicorn
 
 
 app = FastAPI()
@@ -39,3 +40,17 @@ def return_cities():
 @app.get("/flights/")
 def return_flights():
     return database.run_query("SELECT * FROM Flights;", False)
+
+@app.get("/get_id_by_name/{table}-{name}")
+def get_id_by_name(table : str, name : str):
+    return database.run_query(f"SELECT id FROM {table} WHERE name = '{name}';", True)
+
+@app.post("/add_flight/")
+def add_flight(item : Post_rocket):
+    if database.post_data(f"INSERT INTO Flights ('name', 'rocket', 'cost', 'date', 'first_city', 'second_city') VALUES ('{item.name}', {item.rocket}, {item.cost}, {item.date}, {item.first_city}, {item.second_city});"):
+        return {'OK'}
+    else:
+        return {'Error'}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)

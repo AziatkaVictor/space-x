@@ -1,13 +1,11 @@
 from pydantic import BaseModel
+import datetime
 
 
-class User(BaseModel):
-    username: str
-    password: str
-
-class rocket_by_id(BaseModel):
-    id: int
-
-class citys_by_id(BaseModel):
-    first_city: int
-    second_city: int
+class Post_rocket(BaseModel):
+    name : str
+    rocket : int
+    cost : int
+    date : datetime.datetime
+    first_city : int
+    second_city : int

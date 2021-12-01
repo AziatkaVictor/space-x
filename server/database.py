@@ -12,7 +12,7 @@ def run_query(text, is_fetchone):
         sqlite_connection.row_factory = dict_factory
         cursor = sqlite_connection.cursor()
         cursor.execute(text)
-        
+
         if is_fetchone is True:
             result = cursor.fetchone()
         else:
@@ -24,3 +24,14 @@ def run_query(text, is_fetchone):
     except sqlite3.Error as error:
         print("Ошибка при подключении к sqlite", error)
         return False
+
+def post_data(text):
+    try:
+        sqlite_connection = sqlite3.connect('data/spacex_database.db')
+        cursor = sqlite_connection.cursor()
+        cursor.execute(text)
+        return cursor.lastrowid
+
+    except sqlite3.Error as error:
+        print("Ошибка при подключении к sqlite", error)
+        return None
