@@ -2,7 +2,8 @@ from PyQt5 import uic
 from PyQt5 import QtCore
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QLineEdit, QComboBox, QCheckBox, QSpinBox, QDateTimeEdit, QHBoxLayout, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, QAbstractSpinBox
-from ui.server_request import rockets, citys
+from ui import server_request
+from datetime import datetime
 
 class CreationDialogGUI(QWidget):
     def __init__(self):
@@ -31,10 +32,9 @@ class CreationDialogGUI(QWidget):
 
         self.EditRocket = QComboBox()
 
-        for i in rockets():
-            self.EditRocket.addItem(i[1])
+        for i in server_request.rockets():
+            self.EditRocket.addItem(i['name'])
 
-        self.EditRocket.addItem
         self.EditRocketLabel = QLabel('Тип ракеты:')
         self.EditRocketLabel.setFont(font)
         self.Rocket = QVBoxLayout()
@@ -68,8 +68,8 @@ class CreationDialogGUI(QWidget):
         self.FirstCityLabel = QLabel('Откуда:')
         self.FirstCityLabel.setFont(font)
 
-        for i in citys():
-            self.FirstCity.addItem(i[1])
+        for i in server_request.citys():
+            self.FirstCity.addItem(i['name'])
 
         self.FirstCity.currentIndexChanged.connect(self.FillSecondCity)
 
@@ -101,16 +101,61 @@ class CreationDialogGUI(QWidget):
         self.verticalLayout_2.addItem(self.DialogSpacer1)
 
         self.AcceptButton = QPushButton('Создать')
-        #accept.clicked.connect(lambda checked, arg=[item, 'edit']: self.FlightsButton(arg))
         self.AcceptButton.setStyleSheet('background: #18181c; border: 0px; padding: 10px; border-radius: 15px; color: #fff;')
         self.AcceptButton.setFont(font)
+        self.AcceptButton.setDisabled(True)
         self.verticalLayout_2.addWidget(self.AcceptButton)
 
         flags = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setWindowFlags(flags)
+        
+        self.AcceptButton.clicked.connect(self.CreateNew)
+        self.EditTitle.textChanged.connect(self.UpdateButton)
+        self.EditCost.valueChanged.connect(self.UpdateButton)
+        self.EditDate.dateTimeChanged.connect(self.UpdateButton)
+        self.SecondCity.currentTextChanged.connect(self.UpdateButton)
+
+        self.UpdateButton()
 
     def CloseWindow(self):
         self.close()
+
+    def CreateNew(self):
+        print('lol')
+
+    def UpdateButton(self):
+        if self.EditTitle.text().replace(' ', ''):
+            Title = True
+            self.EditTitleLabel.setStyleSheet('color: #fff;')
+        else:
+            Title = False
+            self.EditTitleLabel.setStyleSheet('color: red;')
+
+        if self.EditCost.value() != 0:
+            Cost = True
+            self.EditCostLabel.setStyleSheet('color: #fff;')
+        else:
+            Cost = False
+            self.EditCostLabel.setStyleSheet('color: red;')
+
+        if self.EditDate.dateTime() > datetime.now():
+            Time = True
+            self.EditDateLabel.setStyleSheet('color: #fff;')
+        else: 
+            Time = False
+            self.EditDateLabel.setStyleSheet('color: red;')
+        
+        if self.SecondCity.count() != 0:
+            City = True
+            self.SecondCityLabel.setStyleSheet('color: #fff;')
+        else:
+            City = False
+            self.SecondCityLabel.setStyleSheet('color: red;')
+
+        if Title and Cost and Time and City:
+            self.AcceptButton.setDisabled(False)
+        else:
+            self.AcceptButton.setDisabled(True)
 
     def MoveWindow(self, event):
         if event.buttons() == QtCore.Qt.LeftButton:
@@ -125,16 +170,13 @@ class CreationDialogGUI(QWidget):
         super(CreationDialogGUI, self).mousePressEvent(event)
 
     def FillSecondCity(self):
-        first_city = self.FirstCity.currentText()
+        all_cities = server_request.citys_without_this(self.FirstCity.currentText())
 
-        if self.SecondCity.count() is not 0:
+        if self.SecondCity.count():
             self.SecondCity.clear()
 
-        # TODO Заменить индекс у массива на название поля
-
-        for i in citys():
-            if i[1].lower() != first_city.lower():
-                self.SecondCity.addItem(i[1])
+        for i in all_cities:
+            self.SecondCity.addItem(i['name'])
 
 
 

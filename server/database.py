@@ -1,12 +1,25 @@
 import sqlite3
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
-def run_query(text):
+def run_query(text, is_fetchone):
     try:
         sqlite_connection = sqlite3.connect('data/spacex_database.db')
+        sqlite_connection.row_factory = dict_factory
         cursor = sqlite_connection.cursor()
         cursor.execute(text)
-        return cursor.fetchall()
+        
+        if is_fetchone is True:
+            result = cursor.fetchone()
+        else:
+            result = cursor.fetchall()
+        
+        print(result)    
+        return result
 
     except sqlite3.Error as error:
         print("Ошибка при подключении к sqlite", error)

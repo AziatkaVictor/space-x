@@ -11,6 +11,8 @@ class MainApplicationGUI(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/data/main.ui', self)
+        
+        self.setMinimumSize(512, 512)
 
         self.ButtonClose.clicked.connect(self.CloseWindow)
         self.FlightsPage_Top_Create.clicked.connect(lambda checked, arg=['edit']: self.CreatingDialog(arg))
@@ -85,20 +87,18 @@ class MainApplicationGUI(QWidget):
                 img = QLabel()
                 text = QTextBrowser()
                 url = ''
+                
+                data_text = 'Название: ' + str(item['name']) + '\nОписание: ' + str(item['descr'])
 
-                if url != item[3]:
-                    url = item[3]
+                if url != item['img']:
                     image = QImage()
-                    image.loadFromData(requests.get(url).content)
+                    image.loadFromData(requests.get(item['img']).content)
 
                 data_img = QPixmap(image).scaled(256, 256, QtCore.Qt.KeepAspectRatioByExpanding)
 
                 img.setPixmap(data_img)
                 img.setMaximumHeight(256)
                 img.setAlignment(QtCore.Qt.AlignCenter)
-
-                data_text = 'Название: ' + str(item[1]) + '\nОписание: ' + str(item[2])
-
                 text.setText(data_text)
 
                 font = QFont()
@@ -132,13 +132,11 @@ class MainApplicationGUI(QWidget):
                 for i in reversed(range(self.verticalLayout_5.count())):
                     self.verticalLayout_5.itemAt(i).widget().deleteLater()
 
-        # TODO Заменить индексы на имена поля
-
         if len(data) != 0:
             for item in data:
-                rocket = server_request.rocket_by_id(item[2])
-                start_city = server_request.citys_by_id(item[7])
-                end_city = server_request.citys_by_id(item[8])
+                rocket = server_request.rocket_by_id(item['rocket'])
+                start_city = server_request.citys_by_id(item['first_city'])
+                end_city = server_request.citys_by_id(item['second_city'])
                 check = server_request.is_admin(self.User)
                 widget = QWidget()
                 card = QHBoxLayout()
@@ -147,7 +145,7 @@ class MainApplicationGUI(QWidget):
                 img = QLabel()
                 text = QTextBrowser()
 
-                data_text = 'Название: ' + str(item[1]) + '\nРакета: ' + str(rocket[0][1]) + '\nРейс: ' + str(start_city[0]) + ' - ' + str(end_city[0]) + '\nЦена билета: ' + str(item[5])
+                data_text = 'Название: ' + str(item['name']) + '\nРакета: ' + str(rocket['name']) + '\nРейс: ' + str(start_city['name']) + ' - ' + str(end_city['name']) + '\nЦена билета: ' + str(item['cost'])
 
                 text.setText(data_text)
 
@@ -156,10 +154,9 @@ class MainApplicationGUI(QWidget):
                 font.setPointSize(10)
                 text.setFont(font)
 
-                if url != rocket[0][3]:
-                    url = rocket[0][3]
+                if url != rocket['img']:
                     image = QImage()
-                    image.loadFromData(requests.get(url).content)
+                    image.loadFromData(requests.get(rocket['img']).content)
 
                 data_img = QPixmap(image).scaled(128, 128, QtCore.Qt.KeepAspectRatioByExpanding)
 
@@ -206,9 +203,9 @@ class MainApplicationGUI(QWidget):
         type = arg[1]
 
         if type.lower() == 'edit':
-            print('Ahahahahahah')
+            print(data)
         elif type.lower() == 'delete':
-            print('Hehehehehe')
+            print(data)
 
     def CreatingDialog(self, arg):
         self.dialog = dialogs.CreationDialogGUI()
