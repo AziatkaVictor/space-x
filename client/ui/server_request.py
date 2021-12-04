@@ -1,5 +1,4 @@
 import requests
-import urllib
 
 
 API = 'http://127.0.0.1:8000'
@@ -32,4 +31,12 @@ def get_id_by_name(table, name):
     return requests.get(f'{API}/get_id_by_name/{table}-{name}').json()['id']
 
 def add_flight(name, rocket, cost, date, first_city, second_city):
-    requests.post(f'{API}/add_flight/', data={'name' : name, 'rocket' : rocket, 'cost' : cost, 'date' : date, 'first_city' : first_city, 'second_city' : second_city})
+    data = {
+        "name" : f"{name}", 
+        "rocket" : rocket, 
+        "cost" : cost,
+        "date" : f"{date}", 
+        "first_city" : first_city, 
+        "second_city" : second_city
+    }
+    print(requests.post(f'{API}/add_flight/', json=data).json())

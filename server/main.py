@@ -46,11 +46,12 @@ def get_id_by_name(table : str, name : str):
     return database.run_query(f"SELECT id FROM {table} WHERE name = '{name}';", True)
 
 @app.post("/add_flight/")
-def add_flight(item : Post_rocket):
-    if database.post_data(f"INSERT INTO Flights ('name', 'rocket', 'cost', 'date', 'first_city', 'second_city') VALUES ('{item.name}', {item.rocket}, {item.cost}, {item.date}, {item.first_city}, {item.second_city});"):
+def add_flight(item : Rocket):
+    print(f"INSERT INTO Flights ('name', 'rocket', 'cost', 'date_and_time', 'first_city', 'second_city') VALUES ('{item.name}', {item.rocket}, {item.cost}, '{item.date}', {item.first_city}, {item.second_city});")
+    if database.post_data(f"INSERT INTO Flights ('name', 'rocket', 'cost', 'date_and_time', 'first_city', 'second_city') VALUES ('{item.name}', {item.rocket}, {item.cost}, '{item.date}', {item.first_city}, {item.second_city});"):
         return {'OK'}
     else:
-        return {'Error'}
+        return item
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

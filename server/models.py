@@ -1,11 +1,11 @@
 from pydantic import BaseModel
-import datetime
+from datetime import datetime
 
 
-class Post_rocket(BaseModel):
+class Rocket(BaseModel):
     name : str
     rocket : int
     cost : int
-    date : datetime.datetime
+    date : datetime
     first_city : int
     second_city : int

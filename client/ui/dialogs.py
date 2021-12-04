@@ -121,7 +121,9 @@ class CreationDialogGUI(QWidget):
 
     def CreateNew(self):
         date_time = self.EditDate.dateTime().toPyDateTime().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        print(date_time)
         server_request.add_flight(self.EditTitle.text(), server_request.get_id_by_name('Rockets', self.EditRocket.currentText()), self.EditCost.value(), date_time, server_request.get_id_by_name('Citys', self.FirstCity.currentText()), server_request.get_id_by_name('Citys', self.SecondCity.currentText()))
+        self.CloseWindow()
 
     def UpdateButton(self):
         if self.EditTitle.text().replace(' ', ''):
