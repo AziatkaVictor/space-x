@@ -1,10 +1,11 @@
 from PyQt5 import uic
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap, QImage, QFont, QIcon
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextBrowser, QSpacerItem, QSizePolicy, QPushButton, QSizeGrip
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextBrowser, QSpacerItem, QSizePolicy, QPushButton, QSizeGrip
 from PyQt5.QtCore import QSize
 from . import server_request
 from . import dialogs
+from . import flight_card
 import requests
 
 class MainApplicationGUI(QWidget):
@@ -85,10 +86,11 @@ class MainApplicationGUI(QWidget):
                 card = QVBoxLayout()
 
                 img = QLabel()
+                title = QLabel()
                 text = QTextBrowser()
                 url = ''
                 
-                data_text = 'Название: ' + str(item['name']) + '\nОписание: ' + str(item['descr'])
+                data_text = '<big>Описание:</big><br><font size=16px, color=#cacdcf>' + str(item['descr']) + '</font><br>Максимальное количество пасажиров: ' + str(item['max_people_count']) + '<br>Количество запусков: ' + str(item['count_of_launches'])
 
                 if url != item['img']:
                     image = QImage()
@@ -99,16 +101,23 @@ class MainApplicationGUI(QWidget):
                 img.setPixmap(data_img)
                 img.setMaximumHeight(256)
                 img.setAlignment(QtCore.Qt.AlignCenter)
+                title.setText(item['name'])
                 text.setText(data_text)
 
                 font = QFont()
                 font.setFamily(u'Montserrat Medium')
                 font.setPointSize(10)
                 text.setFont(font)
+                font2 = QFont()
+                font2.setFamily(u'Montserrat Light')
+                font2.setPointSize(16)
+                title.setFont(font2)
 
                 text.setStyleSheet('background: #18181c; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px; padding: 10px; color: #fff;')
+                title.setStyleSheet('background: #18181c; padding: 10px; padding-bottom: 0px; color: #fff;')
 
                 card.addWidget(img)
+                card.addWidget(title)
                 card.addWidget(text)
                 card.setContentsMargins(5, 0, 5, 10)
                 card.setSpacing(0)
@@ -134,78 +143,24 @@ class MainApplicationGUI(QWidget):
 
         if len(data) != 0:
             for item in data:
-                rocket = server_request.rocket_by_id(item['rocket'])
-                start_city = server_request.citys_by_id(item['first_city'])
-                end_city = server_request.citys_by_id(item['second_city'])
                 check = server_request.is_admin(self.User)
-                widget = QWidget()
-                card = QHBoxLayout()
-                url = ''
 
-                img = QLabel()
-                text = QTextBrowser()
+                # TODO: Заменить на загрузку файлов
 
-                data_text = 'Название: ' + str(item['name']) + '\nРакета: ' + str(rocket['name']) + '\nРейс: ' + str(start_city['name']) + ' - ' + str(end_city['name']) + '\nЦена билета: ' + str(item['cost'])
-
-                text.setText(data_text)
-
-                font = QFont()
-                font.setFamily(u'Montserrat Medium')
-                font.setPointSize(10)
-                text.setFont(font)
-
-                if url != rocket['img']:
-                    image = QImage()
-                    image.loadFromData(requests.get(rocket['img']).content)
-
-                data_img = QPixmap(image).scaled(128, 128, QtCore.Qt.KeepAspectRatioByExpanding)
-
-                img.setPixmap(data_img)
-                img.setMaximumSize(128, 128)
-                img.setMinimumSize(128, 128)
-                img.setAlignment(QtCore.Qt.AlignCenter)
-
-                card.addWidget(img)
-                card.addWidget(text)
+                
+                widget = flight_card.FlightsCardGUI()
 
                 if check:
-                    edit_button = QPushButton()
-                    edit_button.clicked.connect(lambda checked, arg=[item, 'edit']: self.FlightsButton(arg))
-                    edit_button.setStyleSheet('background: #1f1f23; border: 0px; padding: 5px; border-radius: 5px; width: 45px; height: 45px; margin-right: 10px;')
-                    edit_button.setIcon(QIcon("ui/img/edit-icon.png"))
-                    edit_button.setIconSize(QSize(32, 32))
-                    card.addWidget(edit_button)
+                    widget.AddButtons(item)
 
-                    delete_button = QPushButton()
-                    delete_button.clicked.connect(lambda checked, arg=[item, 'delete']: self.FlightsButton(arg))
-                    delete_button.setStyleSheet('background: #1f1f23; border: 0px; padding: 5px; border-radius: 5px; width: 45px; height: 45px; margin-right: 10px;')
-                    delete_button.setIcon(QIcon("ui/img/delete-icon.png"))
-                    delete_button.setIconSize(QSize(32, 32))
-                    card.addWidget(delete_button)
+                widget.SetData(item)
 
-                card.setContentsMargins(5, 5, 5, 5)
-                card.setSpacing(0)
-
-                widget.setStyleSheet('background: #18181c; border-radius: 14px; padding: 10px; color: #fff;')
-
-                widget.setLayout(card)
-                widget.setMinimumHeight(138)
-                widget.setMaximumHeight(138)
                 self.verticalLayout_5.addWidget(widget)
 
             self.FlightsPage_Spacer1 = QSpacerItem(10, 10, QSizePolicy.Expanding, QSizePolicy.Expanding)
             self.verticalLayout_5.addItem(self.FlightsPage_Spacer1)
 
         self.FlightsPage_Top_Refresh.setDisabled(False)
-
-    def FlightsButton(self, arg):
-        data = arg[0]
-        type = arg[1]
-
-        if type.lower() == 'edit':
-            print(data)
-        elif type.lower() == 'delete':
-            print(data)
 
     def CreatingDialog(self, arg):
         self.dialog = dialogs.CreationDialogGUI()

@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from PyQt5 import QtCore
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QLineEdit, QComboBox, QCheckBox, QSpinBox, QDateTimeEdit, QHBoxLayout, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, QAbstractSpinBox
+from PyQt5.QtWidgets import QWidget, QLineEdit, QComboBox, QSpinBox, QDateTimeEdit, QHBoxLayout, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, QAbstractSpinBox
 from ui import server_request
 from datetime import datetime
 
