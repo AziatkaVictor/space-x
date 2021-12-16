@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QLineEdit, QComboBox, QSpinBox, QDateTimeEd
 from ui import server_request
 from datetime import datetime
 
-class CreationDialogGUI(QWidget):
+class FlightsDialogGUI(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/data/dialog.ui', self)
@@ -55,7 +55,7 @@ class CreationDialogGUI(QWidget):
         self.EditDate = QDateTimeEdit()
         self.EditDateLabel = QLabel('Дата и время рейса:')
         self.EditDateLabel.setFont(font)
-        self.EditDate.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        # self.EditDate.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Date = QVBoxLayout()
         self.Date.addWidget(self.EditDateLabel)
         self.Date.addWidget(self.EditDate)
@@ -107,22 +107,24 @@ class CreationDialogGUI(QWidget):
         flags = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setWindowFlags(flags)
         
-        self.AcceptButton.clicked.connect(self.CreateNew)
         self.EditTitle.textChanged.connect(self.UpdateButton)
         self.EditCost.valueChanged.connect(self.UpdateButton)
         self.EditDate.dateTimeChanged.connect(self.UpdateButton)
         self.SecondCity.currentTextChanged.connect(self.UpdateButton)
 
         self.UpdateButton()
-        self.FillSecondCity()
 
     def CloseWindow(self):
         self.close()
 
     def CreateNew(self):
-        date_time = self.EditDate.dateTime().toPyDateTime().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        print(date_time)
+        date_time = self.EditDate.dateTime().toPyDateTime().strftime("%Y-%m-%dT%H:%M")
         server_request.add_flight(self.EditTitle.text(), server_request.get_id_by_name('Rockets', self.EditRocket.currentText()), self.EditCost.value(), date_time, server_request.get_id_by_name('Citys', self.FirstCity.currentText()), server_request.get_id_by_name('Citys', self.SecondCity.currentText()))
+        self.CloseWindow()
+
+    def Edit(self):
+        date_time = self.EditDate.dateTime().toPyDateTime().strftime("%Y-%m-%dT%H:%M")
+        server_request.edit_flight(self.item['id'], self.EditTitle.text(), server_request.get_id_by_name('Rockets', self.EditRocket.currentText()), self.EditCost.value(), date_time, server_request.get_id_by_name('Citys', self.FirstCity.currentText()), server_request.get_id_by_name('Citys', self.SecondCity.currentText()))
         self.CloseWindow()
 
     def UpdateButton(self):
@@ -159,17 +161,20 @@ class CreationDialogGUI(QWidget):
         else:
             self.AcceptButton.setDisabled(True)
 
-    def MoveWindow(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
-            self.move(self.pos() + event.globalPos() - self.clickPosition)
-            self.clickPosition = event.globalPos()
-            event.accept()
-        super(CreationDialogGUI, self).mouseMoveEvent(event)
-
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self.clickPosition = event.globalPos()
-        super(CreationDialogGUI, self).mousePressEvent(event)
+    def SetType(self, type, item):
+        if type.lower() == 'add':
+            self.AcceptButton.clicked.connect(self.CreateNew)
+            self.FillSecondCity()
+        elif type.lower() == 'edit':
+            self.item = item
+            self.EditTitle.setText(str(item['name']))
+            self.EditRocket.setCurrentText(str(server_request.rocket_by_id(item['rocket'])['name']))
+            self.EditCost.setValue(item['cost'])
+            self.EditDate.setDateTime(datetime.strptime(item['date_and_time'].replace('T', ' '), "%Y-%m-%d %H:%M:%S"))
+            self.FirstCity.setCurrentText(str(server_request.citys_by_id(item['first_city'])['name']))
+            self.SecondCity.setCurrentText(str(server_request.citys_by_id(item['second_city'])['name']))
+            self.AcceptButton.clicked.connect(self.Edit)
+        
 
     def FillSecondCity(self):
         all_cities = server_request.citys_without_this(self.FirstCity.currentText())
@@ -179,3 +184,53 @@ class CreationDialogGUI(QWidget):
 
         for i in all_cities:
             self.SecondCity.addItem(i['name'])
+
+    def MoveWindow(self, event):
+        if event.buttons() == QtCore.Qt.LeftButton:
+            self.move(self.pos() + event.globalPos() - self.clickPosition)
+            self.clickPosition = event.globalPos()
+            event.accept()
+        super(FlightsDialogGUI, self).mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.clickPosition = event.globalPos()
+        super(FlightsDialogGUI, self).mousePressEvent(event)
+
+class DeleteDialogGUI(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('ui/data/delete_dialog.ui', self)
+
+        self.ButtonClose.clicked.connect(self.CloseWindow)
+        self.NoButton.clicked.connect(self.CloseWindow)
+        self.YesButton.clicked.connect(self.Delete)
+
+        self.NavBar.mouseMoveEvent = self.MoveWindow
+        self.NavBar_Title.mouseMoveEvent = self.MoveWindow
+
+        flags = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(flags)
+    
+    def MoveWindow(self, event):
+        if event.buttons() == QtCore.Qt.LeftButton:
+            self.move(self.pos() + event.globalPos() - self.clickPosition)
+            self.clickPosition = event.globalPos()
+            event.accept()
+        super(DeleteDialogGUI, self).mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.clickPosition = event.globalPos()
+        super(DeleteDialogGUI, self).mousePressEvent(event)
+
+    def CloseWindow(self):
+        self.close()
+
+    def SetItem(self, id, name):
+        self.id = id
+        self.Text.setText(f'Удалить рейс "{name}"?')
+
+    def Delete(self):
+        server_request.delete_flight(self.id)
+        self.CloseWindow()

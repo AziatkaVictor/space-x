@@ -52,5 +52,17 @@ def add_flight(item : Rocket):
     else:
         return item
 
+@app.post("/edit_flight/")
+def add_flight(item : EditRocket):
+    if database.post_data(f"UPDATE Flights SET 'name' = '{item.name}', 'rocket' = {item.rocket}, 'cost' = {item.cost}, 'date_and_time' = '{item.date}', 'first_city' = {item.first_city}, 'second_city' = {item.second_city} WHERE id = {item.id};"):
+        return 'OK'
+    else:
+        return item
+
+@app.post("/delete_flight/{id}")
+def delete_flight(id : int):
+    database.delete_data(f'DELETE FROM Flights WHERE id = {id};')
+    return 'OK'
+
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

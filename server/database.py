@@ -31,9 +31,22 @@ def post_data(text):
         cursor = sqlite_connection.cursor()
         cursor.execute(text)
         sqlite_connection.commit()
-        print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+        # print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
         cursor.close()
         
     except sqlite3.Error as error:
         print("Ошибка при подключении к sqlite", error)
         return None
+
+def delete_data(text):
+    try:
+        sqlite_connection = sqlite3.connect('data/spacex_database.db')
+        cursor = sqlite_connection.cursor()
+        cursor.execute(text)
+        sqlite_connection.commit()
+        # print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+        cursor.close()
+        
+    except sqlite3.Error as error:
+        print("Ошибка при подключении к sqlite", error)
+        return None    

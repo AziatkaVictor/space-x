@@ -1,4 +1,5 @@
 import requests
+from requests.api import request
 
 
 API = 'http://127.0.0.1:8000'
@@ -40,3 +41,18 @@ def add_flight(name, rocket, cost, date, first_city, second_city):
         "second_city" : second_city
     }
     print(requests.post(f'{API}/add_flight/', json=data).json())
+
+def edit_flight(id, name, rocket, cost, date, first_city, second_city):
+    data = {
+        "id" : id,
+        "name" : f"{name}", 
+        "rocket" : rocket, 
+        "cost" : cost,
+        "date" : f"{date}", 
+        "first_city" : first_city, 
+        "second_city" : second_city
+    }
+    print(requests.post(f'{API}/edit_flight/', json=data).json())
+
+def delete_flight(id):
+    return requests.post(f'{API}/delete_flight/{id}').text

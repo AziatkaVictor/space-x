@@ -9,3 +9,12 @@ class Rocket(BaseModel):
     date : datetime
     first_city : int
     second_city : int
+
+class EditRocket(BaseModel):
+    id : int
+    name : str
+    rocket : int
+    cost : int
+    date : datetime
+    first_city : int
+    second_city : int

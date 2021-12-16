@@ -4,9 +4,10 @@ from PyQt5.QtGui import QPixmap, QImage, QFont, QIcon
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextBrowser, QSpacerItem, QSizePolicy, QPushButton, QSizeGrip
 from PyQt5.QtCore import QSize
 from . import server_request
-from . import dialogs
 from . import flight_card
 import requests
+from . import dialogs
+
 
 class MainApplicationGUI(QWidget):
     def __init__(self):
@@ -16,7 +17,7 @@ class MainApplicationGUI(QWidget):
         self.setMinimumSize(512, 512)
 
         self.ButtonClose.clicked.connect(self.CloseWindow)
-        self.FlightsPage_Top_Create.clicked.connect(lambda checked, arg=['edit']: self.CreatingDialog(arg))
+        self.FlightsPage_Top_Create.clicked.connect(lambda checked, arg=[]: self.AddFlight())
         self.StartPage_Top_Refresh.clicked.connect(self.GetRocketsInfo)
         self.FlightsPage_Top_Refresh.clicked.connect(self.GetFlightsInfo)
 
@@ -145,9 +146,6 @@ class MainApplicationGUI(QWidget):
             for item in data:
                 check = server_request.is_admin(self.User)
 
-                # TODO: Заменить на загрузку файлов
-
-                
                 widget = flight_card.FlightsCardGUI()
 
                 if check:
@@ -161,7 +159,8 @@ class MainApplicationGUI(QWidget):
             self.verticalLayout_5.addItem(self.FlightsPage_Spacer1)
 
         self.FlightsPage_Top_Refresh.setDisabled(False)
-
-    def CreatingDialog(self, arg):
-        self.dialog = dialogs.CreationDialogGUI()
-        self.dialog.show()
+    
+    def AddFlight(self):
+        dialog = dialogs.FlightsDialogGUI()
+        dialog.SetType('add', [])
+        dialog.show()
