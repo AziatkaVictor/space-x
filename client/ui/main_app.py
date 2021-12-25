@@ -27,6 +27,7 @@ class MainApplicationGUI(QWidget):
         self.NavBar_Title.mouseMoveEvent = self.MoveWindow
 
         self.sizegrip = QSizeGrip(self)
+        self.sizegrip.setStyleSheet('background: #18181c;')
         self.verticalLayout.addWidget(self.sizegrip, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
 
         self.tabWidget.blockSignals(True)
@@ -144,21 +145,38 @@ class MainApplicationGUI(QWidget):
 
         if len(data) != 0:
             for item in data:
-                check = server_request.is_admin(self.User)
-
                 widget = flight_card.FlightsCardGUI()
-
-                if check:
-                    widget.AddButtons(item)
-
+                widget.AddButtons(item)
                 widget.SetData(item)
-
-                self.verticalLayout_5.addWidget(widget)
+                self.verticalLayout_5.addWidget(widget, 0)
 
             self.FlightsPage_Spacer1 = QSpacerItem(10, 10, QSizePolicy.Expanding, QSizePolicy.Expanding)
             self.verticalLayout_5.addItem(self.FlightsPage_Spacer1)
 
         self.FlightsPage_Top_Refresh.setDisabled(False)
+
+    def GetArticlesInfo(self):
+        self.RequestsPage_Top_Refresh.setDisabled(True)
+
+        data = server_request.articles()
+
+        if self.verticalLayout_7.count() != 0:
+            self.verticalLayout_7.removeItem(self.FlightsPage_Spacer1)
+            if self.verticalLayout_7.count() != 0:
+                for i in reversed(range(self.verticalLayout_7.count())):
+                    self.verticalLayout_7.itemAt(i).widget().deleteLater()
+
+        if len(data) != 0:
+            for item in data:
+                widget = flight_card.ArticlesCardGUI()
+                widget.AddButtons(item)
+                widget.SetData(item)
+                self.verticalLayout_7.addWidget(widget, 0)
+
+            self.FlightsPage_Spacer1 = QSpacerItem(10, 10, QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.verticalLayout_7.addItem(self.FlightsPage_Spacer1)
+
+        self.RequestsPage_Top_Refresh.setDisabled(False)
     
     def AddFlight(self):
         dialog = dialogs.FlightsDialogGUI()

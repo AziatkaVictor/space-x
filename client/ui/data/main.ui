@@ -22,9 +22,17 @@
    <iconset>
     <normaloff>../img/app-icon.png</normaloff>../img/app-icon.png</iconset>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="styleSheet">
    <string notr="true">#ButtonClose {
 	background-color: rgba(255, 255, 255, 0);
+}
+
+#All {
+	
+	background-color: rgb(24, 24, 28);
 }
 
 #NavBar {
@@ -314,7 +322,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <enum>QTabWidget::West</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <property name="iconSize">
          <size>
@@ -777,6 +785,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                <height>607</height>
               </rect>
              </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7"/>
             </widget>
            </widget>
           </item>

@@ -16,6 +16,9 @@ def rockets():
 def flights():
     return requests.get(f'{API}/flights/').json()
 
+def articles():
+    return requests.get(f'{API}/articles/').json()
+
 def citys():
     return requests.get(f'{API}/cities/').json()
 
@@ -24,6 +27,12 @@ def rocket_by_id(id):
 
 def citys_by_id(id):
     return requests.get(f'{API}/citys_by_id/{id}').json()
+
+def flight_by_id(id):
+    return requests.get(f'{API}/flight_by_id/{id}').json()
+
+def status_by_id(id):
+    return requests.get(f'{API}/status_by_id/{id}').json()
 
 def citys_without_this(name):
     return requests.get(f'{API}/citys_without_this/{name}').json()

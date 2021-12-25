@@ -41,6 +41,10 @@ def return_cities():
 def return_flights():
     return database.run_query("SELECT * FROM Flights;", False)
 
+@app.get("/articles/")
+def return_articles():
+    return database.run_query("SELECT * FROM Articles;", False)
+
 @app.get("/get_id_by_name/{table}-{name}")
 def get_id_by_name(table : str, name : str):
     return database.run_query(f"SELECT id FROM {table} WHERE name = '{name}';", True)

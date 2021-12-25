@@ -54,3 +54,25 @@ class FlightsCardGUI(QWidget):
             dialog.SetItem(data['id'], data['name'])
             print(data)
             dialog.show()
+
+class ArticlesCardGUI(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('ui/data/article_card.ui', self)
+
+    def SetData(self, item):
+        rocket = server_request.flight_by_id(item['flight'])
+        status = server_request.status_by_id(item['status'])
+
+        try:
+            date_and_time = datetime.strptime(item['date'].replace('T', ' '), "%Y-%m-%d %H:%M:%S")
+            date_and_time = str(date_and_time.strftime("%d.%m.%Y %H:%M"))
+        except ValueError:
+            date_and_time = str(item['date'])
+
+        # data_text = 'Рейс: <font color=#cacdcf>' +  + '</font><br>Дата: <font color=#cacdcf>' + date_and_time + '</font>')
+        # self.title.setText(str(item['name']))
+        # self.text.setText(data_text)
+
+    def AddButtons(self, item):
+        self.edit_button.clicked.connect(lambda checked, arg=['edit', item]: self.FlightsButton(arg))
