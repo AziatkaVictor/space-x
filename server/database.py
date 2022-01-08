@@ -33,6 +33,7 @@ def post_data(text):
         sqlite_connection.commit()
         # print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
         cursor.close()
+        return 'OK'
         
     except sqlite3.Error as error:
         print("Ошибка при подключении к sqlite", error)
@@ -46,6 +47,7 @@ def delete_data(text):
         sqlite_connection.commit()
         # print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
         cursor.close()
+        return 'OK'
         
     except sqlite3.Error as error:
         print("Ошибка при подключении к sqlite", error)

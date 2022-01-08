@@ -3,6 +3,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap, QImage, QFont, QIcon
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextBrowser, QSpacerItem, QSizePolicy, QPushButton, QSizeGrip
 from PyQt5.QtCore import QSize
+from . import functions
 from . import server_request
 from . import flight_card
 import requests
@@ -20,6 +21,7 @@ class MainApplicationGUI(QWidget):
         self.FlightsPage_Top_Create.clicked.connect(lambda checked, arg=[]: self.AddFlight())
         self.StartPage_Top_Refresh.clicked.connect(self.GetRocketsInfo)
         self.FlightsPage_Top_Refresh.clicked.connect(self.GetFlightsInfo)
+        self.RequestsPage_Top_Refresh.clicked.connect(self.GetArticlesInfo)
 
         self.tabWidget.setCurrentIndex(0)
 
@@ -30,12 +32,8 @@ class MainApplicationGUI(QWidget):
         self.sizegrip.setStyleSheet('background: #18181c;')
         self.verticalLayout.addWidget(self.sizegrip, 0, QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
 
-        self.tabWidget.blockSignals(True)
-        self.tabWidget.currentChanged.connect(self.UpdateTabInfo)
-
         flags = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setWindowFlags(flags)
-        self.tabWidget.blockSignals(False)
 
     def CloseWindow(self):
         self.close()
@@ -58,19 +56,13 @@ class MainApplicationGUI(QWidget):
 
         self.GetRocketsInfo()
         self.GetFlightsInfo()
-
-    def UpdateTabInfo(self, selected_index):
-        id = int(selected_index)
-
-        if id == 0:
-            pass
-        elif id == 1:
-            pass
+        self.GetArticlesInfo()
 
     def GetRocketsInfo(self):
         self.StartPage_Top_Refresh.setDisabled(True)
 
         data = server_request.rockets()
+        self.data_images = functions.DownloadAllImg(server_request.rockets_logos())
 
         if self.horizontalLayout_4.count() != 0:
             self.horizontalLayout_4.removeItem(self.StartPage_Spacer1)
@@ -90,29 +82,18 @@ class MainApplicationGUI(QWidget):
                 img = QLabel()
                 title = QLabel()
                 text = QTextBrowser()
-                url = ''
                 
                 data_text = '<big>Описание:</big><br><font size=16px, color=#cacdcf>' + str(item['descr']) + '</font><br>Максимальное количество пасажиров: ' + str(item['max_people_count']) + '<br>Количество запусков: ' + str(item['count_of_launches'])
-
-                if url != item['img']:
-                    image = QImage()
-                    image.loadFromData(requests.get(item['img']).content)
-
-                data_img = QPixmap(image).scaled(256, 256, QtCore.Qt.KeepAspectRatioByExpanding)
-
-                img.setPixmap(data_img)
+                
+                img.setPixmap(QPixmap(self.data_images[item['img']]).scaled(256, 256, QtCore.Qt.KeepAspectRatioByExpanding))
                 img.setMaximumHeight(256)
                 img.setAlignment(QtCore.Qt.AlignCenter)
                 title.setText(item['name'])
                 text.setText(data_text)
 
-                font = QFont()
-                font.setFamily(u'Montserrat Medium')
-                font.setPointSize(10)
+                font = QFont(u'Montserrat Medium', 10)
                 text.setFont(font)
-                font2 = QFont()
-                font2.setFamily(u'Montserrat Light')
-                font2.setPointSize(16)
+                font2 = QFont(u'Montserrat Light', 16)
                 title.setFont(font2)
 
                 text.setStyleSheet('background: #18181c; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px; padding: 10px; color: #fff;')
@@ -141,12 +122,14 @@ class MainApplicationGUI(QWidget):
             self.verticalLayout_5.removeItem(self.FlightsPage_Spacer1)
             if self.verticalLayout_5.count() != 0:
                 for i in reversed(range(self.verticalLayout_5.count())):
-                    self.verticalLayout_5.itemAt(i).widget().deleteLater()
+                    self.verticalLayout_5.removeWidget(self.verticalLayout_5.itemAt(i).widget())
 
         if len(data) != 0:
             for item in data:
                 widget = flight_card.FlightsCardGUI()
+                widget.SetOwner(self)
                 widget.AddButtons(item)
+                widget.SetImage(self.data_images[server_request.rocket_by_id(item['rocket'])['img']])
                 widget.SetData(item)
                 self.verticalLayout_5.addWidget(widget, 0)
 
@@ -170,6 +153,7 @@ class MainApplicationGUI(QWidget):
             for item in data:
                 widget = flight_card.ArticlesCardGUI()
                 widget.AddButtons(item)
+                widget.SetOwner(self)
                 widget.SetData(item)
                 self.verticalLayout_7.addWidget(widget, 0)
 
@@ -180,5 +164,6 @@ class MainApplicationGUI(QWidget):
     
     def AddFlight(self):
         dialog = dialogs.FlightsDialogGUI()
+        dialog.SetOwner(self)
         dialog.SetType('add', [])
         dialog.show()

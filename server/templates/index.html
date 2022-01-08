@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>SpaceX</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel='stylesheet' type='text/css' media='screen' href={{ url_for('static', path='/main.css') }}>
+        <link rel="icon" type="image/x-icon" href={{ url_for('static', path='/favicon.png') }}>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-bar">
+                <a class="nav-bar-item logo" href="" style="background: url(https://spacex-microsite.netlify.app/images/spacex-logo-big.png); background-position: 0 -12px; background-size: cover; width: 180px; height: 80px;"></a>
+                <a class="nav-bar-item" href="#">Новости</a>
+                <a class="nav-bar-item" href="#">Рейсы</a>
+                <a class="nav-bar-item" href="#">Тех. поддержка</a>
+                <a class="nav-bar-item more" href="#">...</a>
+            </div>
+        </nav>
+        <div class="container-fullscreen" style="background-image: linear-gradient(0deg, rgb(10 10 14 / 85%) 0%, transparent 60%), url(https://hdwallpaperim.com/wp-content/uploads/2017/08/22/438566-rocket-Launch-space-spaceship-night-NASA.jpg);"> 
+            <div class="container-fullscreen-block align-div-left">
+                <h1>Title</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            </div>
+        </div>
+        <div class="container-fullscreen" style="background-image: linear-gradient(0deg, rgb(10 10 14 / 85%) 0%, transparent 60%), url(https://images.axios.com/WjLa0efcuFg17ehWaroX26qIC_Q=/0x580:5568x3712/1920x1080/2019/05/16/1558034377286.jpg);">
+            <div class="container-fullscreen-block align-div-right">
+                <h1 style="text-align: right;">Title</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            </div>
+        </div>
+        <div class="container-fullscreen" style="background-image: linear-gradient(0deg, rgb(10 10 14 / 85%) 0%, transparent 60%), url(https://www.teslarati.com/wp-content/uploads/2019/04/Falcon-Heavy-Flight-2-liftoff-Pauline-Acalin-8-2-c.jpg);">
+            <div class="container-fullscreen-block align-div-left">
+                <h1>Title</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            </div>
+        </div>
+        <div class="container-fullscreen" style="background-image: linear-gradient(0deg, rgb(10 10 14 / 85%) 0%, transparent 60%), url(https://upload.wikimedia.org/wikipedia/commons/8/85/Falcon_Heavy_Demo_Mission_%2840126461411%29.jpg);">
+            <div class="container-fullscreen-block align-div-right">
+                <h1 style="text-align: right;">Title</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            </div>
+        </div>
+        <div class="container-fullscreen" style="background-image: linear-gradient(0deg, rgb(10 10 14 / 85%) 0%, transparent 60%), url(https://icdn2.digitaltrends.com/image/digitaltrends/spacex-falcon-9.jpg);">
+            <div class="container-fullscreen-form">
+                <h1 style="text-align: center; margin-bottom: 2em;">Купить билет</h1>
+                <form method="post" id="article">
+                    <input type="text" name="name" placeholder="Имя"/>
+                    <input type="url" name="docs" placeholder="Ссылка на документы"/>
+                    <select name="select" form="article">
+                        {% for flight in flights %}
+                            <option value={{ flight.id }}>{{ flight.name }} Цена: {{ flight.cost }} Рейс: {{ flight.start }}-{{ flight.end }}</option>
+                        {% endfor %}
+                      </select>
+                    <input type="submit">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

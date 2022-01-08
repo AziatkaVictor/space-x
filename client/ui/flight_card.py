@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QImage, QFont
 from PyQt5.QtWidgets import QWidget
 from . import server_request
 from . import dialogs
+from . import functions
 import requests
 
 
@@ -14,25 +15,37 @@ class FlightsCardGUI(QWidget):
         uic.loadUi('ui/data/flight_card.ui', self)
 
     def SetData(self, item):
-        rocket = server_request.rocket_by_id(item['rocket'])
-        start_city = server_request.citys_by_id(item['first_city'])
-        end_city = server_request.citys_by_id(item['second_city'])
-
-        try:
-            date_and_time = datetime.strptime(item['date_and_time'].replace('T', ' '), "%Y-%m-%d %H:%M:%S")
-            date_and_time = str(date_and_time.strftime("%d.%m.%Y %H:%M"))
-        except ValueError:
-            date_and_time = str(item['date_and_time'])
-
-        data_text = 'Ракета: <font color=#cacdcf>' + str(rocket['name']) + '</font><br>Рейс: <font color=#cacdcf>' + str(start_city['name']) + ' - ' + str(end_city['name']) + '</font><br>Дата: <font color=#cacdcf>' + date_and_time + '</font><br>Цена билета: <font color=#cacdcf>' + str(item['cost'])
+        TextData = [
+            {
+                'title' : 'Ракета',
+                'text' : str(server_request.rocket_by_id(item['rocket'])['name'])
+            },
+            {
+                'title' : 'Рейс',
+                'text' : str(server_request.citys_by_id(item['first_city'])['name']) + ' - ' + str(server_request.citys_by_id(item['second_city'])['name'])
+            },
+            {
+                'title' : 'Дата',
+                'text' : functions.ConvertTime(item['date_and_time'])
+            },
+            {
+                'title' : 'Цена билета',
+                'text' : str(item['cost'])
+            },
+            {
+                'title' : 'Куплено билетов',
+                'text' : str(server_request.get_count_of_atrticles(item['id']))
+            },
+        ]
+        
         self.title.setText(str(item['name']))
-        self.text.setText(data_text)
+        self.text.setText(functions.AttributesToText(TextData))
 
-        image = QImage()
-        image.loadFromData(requests.get(rocket['img']).content)
+    def SetOwner(self, owner):
+        self.owner = owner
 
-        data_img = QPixmap(image).scaled(128, 128, QtCore.Qt.KeepAspectRatioByExpanding)
-
+    def SetImage(self, img):
+        data_img = QPixmap(img).scaled(self.img.size(), QtCore.Qt.KeepAspectRatioByExpanding)
         self.img.setPixmap(data_img)
         self.img.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -46,11 +59,13 @@ class FlightsCardGUI(QWidget):
 
         if type.lower() == 'edit':
             dialog = dialogs.FlightsDialogGUI()
+            dialog.SetOwner(self.owner)
             dialog.SetType(type, data)
             dialog.show()
 
         elif type.lower() == 'delete':
             dialog = dialogs.DeleteDialogGUI()
+            dialog.SetOwner(self.owner)
             dialog.SetItem(data['id'], data['name'])
             print(data)
             dialog.show()
@@ -60,19 +75,37 @@ class ArticlesCardGUI(QWidget):
         super().__init__()
         uic.loadUi('ui/data/article_card.ui', self)
 
+    def SetOwner(self, owner):
+        self.owner = owner
+
     def SetData(self, item):
-        rocket = server_request.flight_by_id(item['flight'])
-        status = server_request.status_by_id(item['status'])
+        TextData = [
+            {
+                'title' : 'Рейс',
+                'text' : str(server_request.flight_by_id(item['flight'])['name'])
+            },
+            {
+                'title' : 'Статус',
+                'text' : str(server_request.status_by_id(item['status'])['name'])
+            },
+            {
+                'title' : 'Дата',
+                'text' : functions.ConvertTime(item['date'])
+            },
+            {
+                'title' : 'Документы',
+                'text' : item['docs']
+            },
+        ]
 
-        try:
-            date_and_time = datetime.strptime(item['date'].replace('T', ' '), "%Y-%m-%d %H:%M:%S")
-            date_and_time = str(date_and_time.strftime("%d.%m.%Y %H:%M"))
-        except ValueError:
-            date_and_time = str(item['date'])
-
-        # data_text = 'Рейс: <font color=#cacdcf>' +  + '</font><br>Дата: <font color=#cacdcf>' + date_and_time + '</font>')
-        # self.title.setText(str(item['name']))
-        # self.text.setText(data_text)
+        self.title.setText(str(item['name']))
+        self.text.setText(functions.AttributesToText(TextData))
 
     def AddButtons(self, item):
-        self.edit_button.clicked.connect(lambda checked, arg=['edit', item]: self.FlightsButton(arg))
+        self.check_button.clicked.connect(lambda checked, arg=[item]: self.CheckArticle(arg))
+
+    def CheckArticle(self, arg):
+        dialog = dialogs.ArticleDialogGUI()
+        dialog.SetOwner(self.owner)
+        dialog.SetItem(arg[0])
+        dialog.show()

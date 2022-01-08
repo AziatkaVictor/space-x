@@ -189,7 +189,25 @@ QLineEdit, QComboBox, QSpinBox, QDateTimeEdit {
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="FlightEdit"/>
+       <widget class="QLineEdit" name="FlightEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="CountLabel">
+        <property name="text">
+         <string>Количество мест</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="CountEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="DateTimeLabel">
@@ -199,17 +217,7 @@ QLineEdit, QComboBox, QSpinBox, QDateTimeEdit {
        </widget>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="DateTimeEdit">
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="DateTimeEdit"/>
       </item>
       <item>
        <widget class="QLabel" name="DocsLabel">
@@ -219,35 +227,7 @@ QLineEdit, QComboBox, QSpinBox, QDateTimeEdit {
        </widget>
       </item>
       <item>
-       <widget class="QScrollArea" name="Docs">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgba(255, 255, 255, 0);
-border: 0px;</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="Content">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>438</width>
-           <height>148</height>
-          </rect>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout"/>
-        </widget>
-       </widget>
+       <widget class="QLineEdit" name="DocsEdit"/>
       </item>
       <item>
        <spacer name="Spacer">
@@ -286,6 +266,9 @@ QPushButton:hover {
         <layout class="QHBoxLayout" name="Buttons">
          <item>
           <widget class="QPushButton" name="YesButton">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string>Одобрить</string>
            </property>
@@ -293,6 +276,9 @@ QPushButton:hover {
          </item>
          <item>
           <widget class="QPushButton" name="NoButton">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string>Отклонить</string>
            </property>
