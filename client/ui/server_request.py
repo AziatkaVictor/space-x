@@ -5,7 +5,7 @@ from requests.api import request
 API = 'http://127.0.0.1:8000'
 
 def user_auth(username, password):
-    return requests.get(f'{API}/login/{username}-{password}').text
+    return requests.get(f'{API}/login/{username}-{password}').json()
 
 def is_admin(username):
     return requests.get(f'{API}/is_admin/{username}').json()['is_admin']

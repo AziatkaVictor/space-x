@@ -10,20 +10,11 @@ class LoginApplicationGUI(QMainWindow):
         super().__init__()
         uic.loadUi('ui/data/login.ui', self)
 
-        # self.Background.setPixmap(QPixmap("ui/img/login-background.png"))
-        # self.Logo.setPixmap(QPixmap("ui/img/Logo.png"))
-        # self.ButtonClose.setIcon(QIcon("ui/img/close-icon.png"))
-
         self.ButtonClose.clicked.connect(self.CloseWindow)
         self.ButtonLogin.clicked.connect(self.Login)
 
         self.NavBar.mouseMoveEvent = self.MoveWindow
         self.NavBar_Title.mouseMoveEvent = self.MoveWindow
-
-        # TODO Убрать, когда закончу.
-
-        self.Username.setText('Admin')
-        self.Password.setText('Admin')
 
         flags = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setWindowFlags(flags)
@@ -43,7 +34,8 @@ class LoginApplicationGUI(QMainWindow):
 
         # FIXME Пофиксить на тип bool
 
-        result = server_request.user_auth(login, password).lower() in ['true', '1']
+        result = server_request.user_auth(login, password)
+        print(result)
 
         if result is True:
             self.AuthClient(login)
