@@ -1,3 +1,5 @@
 .vscode
-.server/data/spacex_database.db-shm
-.server/data/spacex_database.db-wal
+__pycahce__
+spacex_database.db-shm
+spacex_database.db-wal
+spacex_database.db
